@@ -23,6 +23,7 @@ public class InvertedIndex {
 			// Replacing special characters
 			line = data[i].replaceAll(",", "").replaceAll(" '", " ").replaceAll("' ", " ").replaceAll("-", " ");
 			String[] splitLine = line.split(" ");
+			
 			for (String word : splitLine) {
 				sentences = new ArrayList<Integer>();
 				if (inverted_index.containsKey(word.toLowerCase())) {
@@ -39,6 +40,7 @@ public class InvertedIndex {
 	public String[] get(String word) {
 		List<Integer> indexes = inverted_index.get(word.toLowerCase());
 		String[] results = new String[indexes.size()];
+		
 		for (int i = 0; i < indexes.size(); i++) {
 			results[i] = "\"" + data[i] + "\"";
 		}

@@ -14,7 +14,7 @@ public class InvertedIndexTest {
 		invertedIndex.generate();
 		String[] results = invertedIndex.get("music");
 		System.out.println(results.length);
-		System.out.println(Arrays.toString(results)); 
+		System.out.println(Arrays.toString(results));
 	}
 
 }
