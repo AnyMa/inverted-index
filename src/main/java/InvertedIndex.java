@@ -1,9 +1,10 @@
 package main.java;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class InvertedIndex {
 
@@ -14,10 +15,10 @@ public class InvertedIndex {
 			"This strange repackaging of bits and pieces does the Man Booker winner no favours, says Sam Leith",
 			"Another book with music related content" };
 
-	Map<String, List<Integer>> inverted_index = new HashMap<String, List<Integer>>();
+	Map<String, Set<Integer>> inverted_index = new HashMap<String, Set<Integer>>();
 
 	public void generate() {
-		List<Integer> sentences;
+		Set<Integer> sentence;
 		String line;
 		for (int i = 0; i < data.length; i++) {
 			// Replacing special characters
@@ -25,24 +26,29 @@ public class InvertedIndex {
 			String[] splitLine = line.split(" ");
 			
 			for (String word : splitLine) {
-				sentences = new ArrayList<Integer>();
-				if (inverted_index.containsKey(word.toLowerCase())) {
-					sentences = inverted_index.get(word.toLowerCase());
+				if (!inverted_index.containsKey(word.toLowerCase())) {
+					sentence = new HashSet<Integer>();
+				} else {
+					sentence = inverted_index.get(word.toLowerCase());
 				}
-				if (!sentences.contains(i)) {
-					sentences.add(i);
-				}
-				inverted_index.put(word.toLowerCase(), sentences);
+				sentence.add(i);
+				inverted_index.put(word.toLowerCase(), sentence);
 			}
 		}
 	}
 
 	public String[] get(String word) {
-		List<Integer> indexes = inverted_index.get(word.toLowerCase());
+		Set<Integer> indexes = inverted_index.get(word.toLowerCase());
+		if (indexes == null) {
+			return new String[0];
+		}
 		String[] results = new String[indexes.size()];
 		
-		for (int i = 0; i < indexes.size(); i++) {
-			results[i] = "\"" + data[i] + "\"";
+		Iterator<Integer> it = indexes.iterator();
+		int i = 0;
+		while (it.hasNext()) {
+			results[i] = "\"" + data[it.next().intValue()] + "\"";
+			i++;
 		}
 		return results;
 	}
